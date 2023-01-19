@@ -7,6 +7,8 @@ package usabilidad_p02_PabloSanchezLopez;
 
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -93,6 +95,31 @@ public class CompraProductos extends javax.swing.JDialog {
         ));
         jtProductos.setRowSelectionAllowed(false);
         jScrollPane1.setViewportView(jtProductos);
+
+        //Hacemos que la tabla no se pueda editar
+        jtProductos.setDefaultEditor(Object.class, null);
+
+        //Creamos un menú contextual para la tabla
+        javax.swing.JPopupMenu menuContextual = new javax.swing.JPopupMenu();
+        javax.swing.JMenuItem itemEliminar = new javax.swing.JMenuItem("Eliminar");
+        itemEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemEliminarActionPerformed(evt);
+            }
+
+            //Método para eliminar la fila seleccionada
+			private void itemEliminarActionPerformed(ActionEvent evt) {
+                int filaSeleccionada = jtProductos.getSelectedRow();
+                DefaultTableModel dtm=(DefaultTableModel) jtProductos.getModel();
+                if(filaSeleccionada != -1){
+                    dtm.removeRow(filaSeleccionada);
+                }
+			}
+        });
+        menuContextual.add(itemEliminar);
+        jtProductos.setComponentPopupMenu(menuContextual);
+
+
 
         btnAgregar.setText("AGREGAR");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -321,21 +348,52 @@ public class CompraProductos extends javax.swing.JDialog {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         DefaultTableModel dtm=(DefaultTableModel) jtProductos.getModel();
+        //Antes de agregar el producto, se debe comprobar que no exista ya en la tabla
+        //System.out.println(cbArticulos.getSelectedItem());
+        for (int i=0; i<dtm.getRowCount(); i++){
+            //System.out.println(dtm.getValueAt(i, 0));
+            if (dtm.getValueAt(i, 0).equals(cbArticulos.getSelectedItem())){
+                //Si el producto ya existe, se debe actualizar la cantidad
+                int cantidad=Integer.parseInt(dtm.getValueAt(i, 1).toString());
+                cantidad+=Integer.parseInt(spnCantidad.getValue().toString());
+                dtm.setValueAt(cantidad, i, 1);
+                //Y actualizamos el precio basado en la cantidad
+                double precio=Double.parseDouble(dtm.getValueAt(i, 2).toString());
+                //System.out.println(precio);
+                precio*=cantidad;
+                //System.out.println(precio);
+                dtm.setValueAt(precio, i, 2);
+                JOptionPane.showMessageDialog(null,"Articulo actualizado.");
+                return;
+            }
+        }
         switch(cbArticulos.getSelectedIndex()){
             case 0:
-                dtm.addRow(new Object[]{"Adorno de Pap� Noel", spnCantidad.getValue(), "2.25"});
+                //Adorno de Papa Noel tiene un precio de 2.25
+                //Calculamos el precio basado en la cantidad
+                double precio=2.25*Integer.parseInt(spnCantidad.getValue().toString());
+                dtm.addRow(new Object[]{"Adorno de Papa Noel", spnCantidad.getValue(), precio});
                 break;
             case 1:
-                dtm.addRow(new Object[]{"Mu�eco de nieve", spnCantidad.getValue(), "1.10"});
+                //Muñeco de nieve tiene un precio de 1.10
+                //Calculamos el precio basado en la cantidad
+                precio=1.10*Integer.parseInt(spnCantidad.getValue().toString());
+                dtm.addRow(new Object[]{"Muñeco de nieve", spnCantidad.getValue(), precio});
                 break;
             case 2:
-                dtm.addRow(new Object[]{"Campanas navide�as", spnCantidad.getValue(), "1.99"});
+                //Campanas navideñas tiene un precio de 1.99
+                //Calculamos el precio basado en la cantidad
+                precio=1.99*Integer.parseInt(spnCantidad.getValue().toString());
+                dtm.addRow(new Object[]{"Campanas navideñas", spnCantidad.getValue(), precio});
                 break;
             case 3:
-                dtm.addRow(new Object[]{"�rbol de Navidad", spnCantidad.getValue(), "15.50"});
+                //Árbol de Navidad tiene un precio de 15.50
+                //Calculamos el precio basado en la cantidad
+                precio=15.50*Integer.parseInt(spnCantidad.getValue().toString());
+                dtm.addRow(new Object[]{"Árbol de Navidad", spnCantidad.getValue(), precio});
                 break;
         }
-        JOptionPane.showMessageDialog(null,"Art�culo agregado.");
+        JOptionPane.showMessageDialog(null,"Artículo agregado.");
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void cbMostrarImagenesMenuItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbMostrarImagenesMenuItemStateChanged
