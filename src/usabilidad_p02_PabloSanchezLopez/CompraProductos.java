@@ -76,7 +76,7 @@ public class CompraProductos extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        cbArticulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Adorno de Papa Noel", "Muñeco de nieve", "Campanas navideñas", "Arbol de navidad" }));
+        cbArticulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Adorno de Papa Noel", "Muñeco de Nieve", "Campanas navideñas", "Árbol de Navidad" }));
         cbArticulos.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbArticulosItemStateChanged(evt);
@@ -122,7 +122,9 @@ public class CompraProductos extends javax.swing.JDialog {
                 }
 			}
         });
+        //Añadimos el item al menú contextual
         menuContextual.add(itemEliminar);
+        //Añadimos el menú contextual a la tabla
         jtProductos.setComponentPopupMenu(menuContextual);
 
 
@@ -380,7 +382,22 @@ public class CompraProductos extends javax.swing.JDialog {
                 }
                 dtm.setValueAt(cantidad, i, 1);
                 //Y actualizamos el precio basado en la cantidad
-                double precio=Double.parseDouble(dtm.getValueAt(i, 2).toString());
+                //El precio cambia dependiendo del articulo
+                double precio=0;
+                switch(cbArticulos.getSelectedIndex()){
+                    case 0:
+                        precio=2.25;
+                        break;
+                    case 1:
+                        precio=1.10;
+                        break;
+                    case 2:
+                        precio=1.99;
+                        break;
+                    case 3:
+                        precio=15.50;
+                        break;
+                }
                 //System.out.println(precio);
                 precio*=cantidad;
                 //System.out.println(precio);
@@ -399,7 +416,7 @@ public class CompraProductos extends javax.swing.JDialog {
                 //Redondeamos a dos decimales
                 precio=Math.round(precio*100.0)/100.0;
                 //Antes de añadir el producto comprobamos que la cantidad no sea 0
-                if (Integer.parseInt(spnCantidad.getValue().toString())==0) {
+                if (Integer.parseInt(spnCantidad.getValue().toString())<=0) {
                     dtm.addRow(new Object[]{"Adorno de Papa Noel", 1, precio});
                 } else {
                     dtm.addRow(new Object[]{"Adorno de Papa Noel", spnCantidad.getValue(), precio});
@@ -412,7 +429,7 @@ public class CompraProductos extends javax.swing.JDialog {
                 //Redondeamos a dos decimales
                 precio=Math.round(precio*100.0)/100.0;
                 //Antes de añadir el producto comprobamos que la cantidad no sea 0
-                if (Integer.parseInt(spnCantidad.getValue().toString())==0) {
+                if (Integer.parseInt(spnCantidad.getValue().toString())<=0) {
                     dtm.addRow(new Object[]{"Muñeco de Nieve", 1, precio});
                 } else {
                     dtm.addRow(new Object[]{"Muñeco de Nieve", spnCantidad.getValue(), precio});
@@ -425,7 +442,7 @@ public class CompraProductos extends javax.swing.JDialog {
                 //Redondeamos a dos decimales
                 precio=Math.round(precio*100.0)/100.0;
                 //Antes de añadir el producto comprobamos que la cantidad no sea 0
-                if (Integer.parseInt(spnCantidad.getValue().toString())==0) {
+                if (Integer.parseInt(spnCantidad.getValue().toString())<=0) {
                     dtm.addRow(new Object[]{"Campanas navideñas", 1, precio});
                 } else {
                     dtm.addRow(new Object[]{"Campanas navideñas", spnCantidad.getValue(), precio});
@@ -437,7 +454,7 @@ public class CompraProductos extends javax.swing.JDialog {
                 precio=15.50*Integer.parseInt(spnCantidad.getValue().toString());
                 //Redondeamos a dos decimales
                 precio=Math.round(precio*100.0)/100.0;
-                if (Integer.parseInt(spnCantidad.getValue().toString())==0) {
+                if (Integer.parseInt(spnCantidad.getValue().toString())<=0) {
                     dtm.addRow(new Object[]{"Arbol de Navidad", 1, precio});
                 } else {
                     dtm.addRow(new Object[]{"Árbol de Navidad", spnCantidad.getValue(), precio});
