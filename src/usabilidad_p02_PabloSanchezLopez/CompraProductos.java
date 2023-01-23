@@ -101,16 +101,22 @@ public class CompraProductos extends javax.swing.JDialog {
 
         //Creamos un menú contextual para la tabla
         javax.swing.JPopupMenu menuContextual = new javax.swing.JPopupMenu();
+        //Creamos un item para el menú contextual
         javax.swing.JMenuItem itemEliminar = new javax.swing.JMenuItem("Eliminar");
+        //Añadimos un listener al item
         itemEliminar.addActionListener(new java.awt.event.ActionListener() {
+            //Método que se ejecuta al pulsar el item, en este caso, eliminar la fila seleccionada
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemEliminarActionPerformed(evt);
             }
 
             //Método para eliminar la fila seleccionada
 			private void itemEliminarActionPerformed(ActionEvent evt) {
+                //Obtenemos la fila seleccionada
                 int filaSeleccionada = jtProductos.getSelectedRow();
+                //Obtenemos el modelo de la tabla
                 DefaultTableModel dtm=(DefaultTableModel) jtProductos.getModel();
+                //Si hay una fila seleccionada, la eliminamos
                 if(filaSeleccionada != -1){
                     dtm.removeRow(filaSeleccionada);
                 }
