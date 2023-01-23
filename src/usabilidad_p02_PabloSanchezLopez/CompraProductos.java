@@ -130,7 +130,7 @@ public class CompraProductos extends javax.swing.JDialog {
 
         spnCantidad.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
-        jLabel2.setText("Cliente#:");
+        jLabel2.setText("Numero de Cliente:");
 
         jLabel3.setText("Nombre:");
 
@@ -140,7 +140,7 @@ public class CompraProductos extends javax.swing.JDialog {
 
         jLabel6.setText("Calle:");
 
-        jLabel7.setText("N�mero:");
+        jLabel7.setText("Numero:");
 
         jLabel8.setText("CP:");
 
@@ -156,7 +156,7 @@ public class CompraProductos extends javax.swing.JDialog {
         jMenu1.setText("Acciones");
 
         cbMostrarImagenesMenu.setSelected(true);
-        cbMostrarImagenesMenu.setText("Mostrar im�genes");
+        cbMostrarImagenesMenu.setText("Mostrar imagenes");
         cbMostrarImagenesMenu.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbMostrarImagenesMenuItemStateChanged(evt);
@@ -171,6 +171,17 @@ public class CompraProductos extends javax.swing.JDialog {
 
         cbGuardar.setText("Guardar");
         jMenu1.add(cbGuardar);
+
+        //Añadimos el listener para el menú guardar
+        cbGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbGuardarActionPerformed(evt);
+            }
+
+			private void cbGuardarActionPerformed(ActionEvent evt) {
+				JOptionPane.showMessageDialog(null,"Se han guardado los datos.");
+			}
+        });
 
         jMenuBar1.add(jMenu1);
 
@@ -355,13 +366,20 @@ public class CompraProductos extends javax.swing.JDialog {
             if (dtm.getValueAt(i, 0).equals(cbArticulos.getSelectedItem())){
                 //Si el producto ya existe, se debe actualizar la cantidad
                 int cantidad=Integer.parseInt(dtm.getValueAt(i, 1).toString());
-                cantidad+=Integer.parseInt(spnCantidad.getValue().toString());
+                //Comprobamos que el valor del spinner no sea 0. Si es 0 añaadimos 1
+                if (Integer.parseInt(spnCantidad.getValue().toString())==0) {
+                    cantidad+=1;
+                } else {
+                    cantidad+=Integer.parseInt(spnCantidad.getValue().toString());
+                }
                 dtm.setValueAt(cantidad, i, 1);
                 //Y actualizamos el precio basado en la cantidad
                 double precio=Double.parseDouble(dtm.getValueAt(i, 2).toString());
                 //System.out.println(precio);
                 precio*=cantidad;
                 //System.out.println(precio);
+                //Redondeamos a dos decimales
+                precio=Math.round(precio*100.0)/100.0;
                 dtm.setValueAt(precio, i, 2);
                 JOptionPane.showMessageDialog(null,"Articulo actualizado.");
                 return;
@@ -372,25 +390,52 @@ public class CompraProductos extends javax.swing.JDialog {
                 //Adorno de Papa Noel tiene un precio de 2.25
                 //Calculamos el precio basado en la cantidad
                 double precio=2.25*Integer.parseInt(spnCantidad.getValue().toString());
-                dtm.addRow(new Object[]{"Adorno de Papa Noel", spnCantidad.getValue(), precio});
+                //Redondeamos a dos decimales
+                precio=Math.round(precio*100.0)/100.0;
+                //Antes de añadir el producto comprobamos que la cantidad no sea 0
+                if (Integer.parseInt(spnCantidad.getValue().toString())==0) {
+                    dtm.addRow(new Object[]{"Adorno de Papa Noel", 1, precio});
+                } else {
+                    dtm.addRow(new Object[]{"Adorno de Papa Noel", spnCantidad.getValue(), precio});
+                }
                 break;
             case 1:
                 //Muñeco de nieve tiene un precio de 1.10
                 //Calculamos el precio basado en la cantidad
                 precio=1.10*Integer.parseInt(spnCantidad.getValue().toString());
-                dtm.addRow(new Object[]{"Muñeco de nieve", spnCantidad.getValue(), precio});
+                //Redondeamos a dos decimales
+                precio=Math.round(precio*100.0)/100.0;
+                //Antes de añadir el producto comprobamos que la cantidad no sea 0
+                if (Integer.parseInt(spnCantidad.getValue().toString())==0) {
+                    dtm.addRow(new Object[]{"Muñeco de Nieve", 1, precio});
+                } else {
+                    dtm.addRow(new Object[]{"Muñeco de Nieve", spnCantidad.getValue(), precio});
+                }
                 break;
             case 2:
                 //Campanas navideñas tiene un precio de 1.99
                 //Calculamos el precio basado en la cantidad
                 precio=1.99*Integer.parseInt(spnCantidad.getValue().toString());
-                dtm.addRow(new Object[]{"Campanas navideñas", spnCantidad.getValue(), precio});
+                //Redondeamos a dos decimales
+                precio=Math.round(precio*100.0)/100.0;
+                //Antes de añadir el producto comprobamos que la cantidad no sea 0
+                if (Integer.parseInt(spnCantidad.getValue().toString())==0) {
+                    dtm.addRow(new Object[]{"Campanas navideñas", 1, precio});
+                } else {
+                    dtm.addRow(new Object[]{"Campanas navideñas", spnCantidad.getValue(), precio});
+                }
                 break;
             case 3:
                 //Árbol de Navidad tiene un precio de 15.50
                 //Calculamos el precio basado en la cantidad
                 precio=15.50*Integer.parseInt(spnCantidad.getValue().toString());
-                dtm.addRow(new Object[]{"Árbol de Navidad", spnCantidad.getValue(), precio});
+                //Redondeamos a dos decimales
+                precio=Math.round(precio*100.0)/100.0;
+                if (Integer.parseInt(spnCantidad.getValue().toString())==0) {
+                    dtm.addRow(new Object[]{"Arbol de Navidad", 1, precio});
+                } else {
+                    dtm.addRow(new Object[]{"Árbol de Navidad", spnCantidad.getValue(), precio});
+                }
                 break;
         }
         JOptionPane.showMessageDialog(null,"Artículo agregado.");
@@ -400,6 +445,7 @@ public class CompraProductos extends javax.swing.JDialog {
         
     }//GEN-LAST:event_cbMostrarImagenesMenuItemStateChanged
 
+    //Funcion del boton de aceptar
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         String errores="";
         String codigo=txtCodigo.getText().toUpperCase();
@@ -410,15 +456,16 @@ public class CompraProductos extends javax.swing.JDialog {
         String cp=txtCP.getText().toUpperCase();
         String localidad=txtLocalidad.getText().toUpperCase();
         
-        if (!codigo.matches("\\d*") || codigo.isEmpty()) errores+="\n-Error en DNI";
-        if (!nombre.matches("[A-Z]*[\\s[A-Z]*]*") || nombre.isEmpty()) errores+="\n-Error en nombre";
-        if (!apellido1.matches("[A-Z]*[\\s[A-Z]*]*") || apellido1.isEmpty()) errores+="\n-Error en apellido1";
-        if (!apellido2.matches("[A-Z]*[\\s[A-Z]*]*") || apellido2.isEmpty()) errores+="\n-Error en apellido2";
-        if (!numero.matches("[0-9]*") || numero.isEmpty()) errores+="\n-Error en n�mero";
-        if (!cp.matches("[0-9]*") || cp.isEmpty()) errores+="\n-Error en CP";
-        if (!localidad.matches("[A-Z]*[\\s[A-Z]*]*") || localidad.isEmpty()) errores+="\n-Error en localidad";
+        if (!codigo.matches("\\d") || codigo.isEmpty()) errores+="\n-Error en el numero de cliente. Compruebe que no haya letras";
+        if (!nombre.matches("[A-Z]*[\\s[A-Z]*]*") || nombre.isEmpty()) errores+="\n-Error en nombre. Compruebe que no haya numeros";
+        if (!apellido1.matches("[A-Z]*[\\s[A-Z]*]*") || apellido1.isEmpty()) errores+="\n-Error en el primer apellido. Compruebe que no haya numeros";
+        if (!apellido2.matches("[A-Z]*[\\s[A-Z]*]*") || apellido2.isEmpty()) errores+="\n-Error en el segundo apellido. Compruebe que no haya numeros";
+        if (!numero.matches("[0-9]*") || numero.isEmpty()) errores+="\n-Error en numero. Compruebe que no haya letras";
+        if (!cp.matches("[0-9]*") || cp.isEmpty()) errores+="\n-Error en Codigo Postal. Compruebe que no haya letras";
+        if (!localidad.matches("[A-Z]*[\\s[A-Z]*]*") || localidad.isEmpty()) errores+="\n-Error en localidad. Compruebe que no haya numeros";
         
         if(errores.isEmpty()){
+            JOptionPane.showMessageDialog(null,"¡Datos correctos!");
             System.exit(0);
         }
         else{
@@ -428,7 +475,7 @@ public class CompraProductos extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
-        JOptionPane.showMessageDialog(null, "�Adi�s!");
+        JOptionPane.showMessageDialog(null, "¡Adios!");
         System.exit(0);
     }//GEN-LAST:event_jMenu2MouseClicked
 
